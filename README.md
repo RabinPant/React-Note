@@ -1483,5 +1483,86 @@ To create the store we will use the redux toolkit.
  
 To connect this store with our application we’ll use provider which will come form the react-redux.
  
+Cart Slice:
+import { createSlice } from "@reduxjs/toolkit";
 
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    items: ["burgers", "pizza"],
+  },
+  reducers: {
+    addItem: (state, action) => {
+      state.items.push(action.payload);
+    },
+    removeItem: (state) => {
+      state.items.pop();
+    },
+    clearCart: (state, action) => {
+      state.items.length = 0;
+    },
+  },
+});
+export const { addItem, removeItem, clearCart } = cartSlice.actions;
+
+export default cartSlice.reducer;
+
+To connect this cart slice with the store
+Appstore.js
+import { configureStore } from "@reduxjs/toolkit";
+import cartReducer from "./cartSlice";
+
+const appStore = configureStore({
+  reducer: {
+    cart: cartReducer,
+  },
+});
+
+export default appStore;
+
+now to provide this store to our app:
+in main app.js
+return (
+    <Provider store={appStore}>
+      <UserContext.Provider value={{ loggedInUser: userName, setUserName }}>
+        <div className="app">
+          <Header />
+          <Outlet />
+        </div>
+      </UserContext.Provider>
+    </Provider>
+  );
+};
+
+now how can I suscribe the data to the store, we can suscribe this data as follows:
+import { useSelector } from "react-redux";
+
+we have to make use of useSelector hook:
+
+//Suscribing to the store using a selector
+  const cartItems = useSelector((store) => store.cart.items);
+now cartItems has all the data that are store in the cart.
+in the header.js file use this:
+ <li className="px-4 font-bold text-xl">
+            Cart({cartItems.length}items)
+          </li>
+ now earlier we have put items in the cart by hardcoding but we want to add item in the cart using the button how can I do that:
+ fot that I need to dispatch an action adding item in the cart:
+
+ to dispatch an action we need to make use of a hook as :
+ const dispatch = useDispatch();
+<button
+                className="p-2 mx-16 rounded-lg bg-black shadow-lg text-white m-auto"
+                onClick={handleAddItem}
+              >
+                Add +
+              </button>
+
+const handleAddItem = ()=>{
+    //dispatch an action:
+    dispatch(addItem("pizza"))
+  }
+here we are adding item in the cart through button but still hardcoding the data, its not coming from the api list of data.
+
+ 
  
