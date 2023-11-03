@@ -1570,5 +1570,44 @@ here cartitems will have all the data that is required for us to show.
 we can create a seperate component for cart and send these data in that function to create the application
 
 
- 
+Testing:
+unit, integration, end to end
+
+library:
+React testing library:
+
+Jest for writing the test cases:
+React testing library is using the Jest in back for the testing.
+npm i -D @testing-library/react
+npm i -D jest
+
+we are using with babel so we have to install babel dependencies as well.
+npm install --save-dev babel-jest @babel/core @babel/preset-env
+
+babel.config.js:
+module.exports = {
+  presets: [['@babel/preset-env', {targets: {node: 'current'}}]],
+};
+
+now to make our bundler parcel work with jest we have to disable the babel default config which parcel picks up.
+
+so to do that create a file with : .parcelrc 
+and add:
+{
+  "extends": "@parcel/config-default",
+  "transformers": {
+    "*.{js,mjs,jsx,cjs,ts,tsx}": [
+      "@parcel/transformer-js",
+      "@parcel/transformer-react-refresh-wrap"
+    ]
+  }
+}
+
+This will help parcle to pick up the config of babel that we created.
+write the jest configuration(install jsdom )
+npx jest --init
+
+
+ if you're using jest above than 28 then we have to separetly install the JSDOM.
+ npm install --save-dev jest-environment-jsdom
  
