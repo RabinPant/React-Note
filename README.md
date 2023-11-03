@@ -1563,6 +1563,12 @@ const handleAddItem = ()=>{
     dispatch(addItem("pizza"))
   }
 here we are adding item in the cart through button but still hardcoding the data, its not coming from the api list of data.
+to ge the data from the store we just need to make use of a hook just like earlier we had done:
+  const cartItems = useSelector((store) => store.cart.items);
+
+here cartitems will have all the data that is required for us to show.
+we can create a seperate component for cart and send these data in that function to create the application
+
 
  
  
