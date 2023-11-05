@@ -1610,4 +1610,13 @@ npx jest --init
 
  if you're using jest above than 28 then we have to separetly install the JSDOM.
  npm install --save-dev jest-environment-jsdom
- 
+ <div className="m-4 p-4 flex items-center">
+          <button
+            className="filter-btn px-4 py-2 bg-gray-100 rounded-xl"
+            onClick={() => {
+              const filteredList = content.filter(
+                (res) => res.info.avgRating >= 4.0
+              );
+              console.log(filteredList);
+              setFilteredResturant(filteredList);
+            }}
