@@ -1,114 +1,11 @@
 Note: 
-
-
-
- 
- 
- 
- 
-This is without BABEL and webpack.
- 
-With babel
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
 As we know we can’t modify props but if we want to do that then there is one way to do it and it’s through the help of state:
+
  
  
- 
- 
- 
-TO BIND THE THIS KEYWORD
+ TO BIND THE THIS KEYWORD
 1)	USE ARROW FUCNTION
 2)	Use constructor to bind this . example 2 below
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
- 
- 
- 
- 
-
- 
-
-
-
  
 API CALL and the use of componentDidMount in it:
  
@@ -1706,3 +1603,104 @@ it("Should load 2 input boxes on the contact component", () => {
 
     expect(inputBoxes.length).toBe(2);
   });
+
+
+  What if you want to load the header component and test if login is available in it.
+  to do this we have to render header and as well provide the <Provider> from react-redux to it. and we also need to have the <BrowserRouter> to have the url.
+
+  Code:
+  import { Provider } from "react-redux";
+import Header from "../Header";
+import { render, screen } from "@testing-library/react";
+import appStore from "../../utils/appStore";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
+
+test("should load Header Component with a login button", () => {
+  render(
+    <BrowserRouter>
+      <Provider store={appStore}>
+        <Header />
+      </Provider>
+    </BrowserRouter>
+  );
+
+  //   const loginButton = screen.getByRole("button");
+  const loginButton = screen.getByText("Login");
+  expect(loginButton).toBeInTheDocument();
+});
+
+
+For clicking even how can we test it:
+for example when we click on Login then it becomes Logout, how can we manage to tet this:
+the only way to do it is:
+it("Should render Header Component with a login logout feature when click", () => {
+  render(
+    <BrowserRouter>
+      <Provider store={appStore}>
+        <Header />
+      </Provider>
+    </BrowserRouter>
+  );
+
+  const loginButton = screen.getByRole("button", { name: "Login" });
+  fireEvent.click(loginButton);
+
+  const logoutButton = screen.getByRole("button", { name: "Logout" });
+
+  expect(logoutButton).toBeInTheDocument();
+});
+
+for testing with props we have to create the mock data that was pass as a props:
+and then we can render the component and pass the mock data and do the testing
+it("should render ResturantCard component with props Data", () => {
+  render(<ResturantCard resData={dataMock} />);
+  const name = screen.getByText("Leon's - Burgers & Wings (Leon Grill)");
+
+  expect(name).toBeInTheDocument();
+});
+
+export const dataMock = {
+  id: "65797",
+  name: "Leon's - Burgers & Wings (Leon Grill)",
+  cloudinaryImageId: "r4ufflqojich0r29efvc",
+  locality: "Koramangala",
+  areaName: "Koramangala",
+  costForTwo: "₹300 for two",
+  cuisines: ["American", "Snacks", "Turkish", "Portuguese", "Continental"],
+  avgRating: 4.3,
+  feeDetails: {
+    restaurantId: "65797",
+    fees: [
+      {
+        name: "BASE_DISTANCE",
+        fee: 3200,
+      },
+      {
+        name: "BASE_TIME",
+      },
+      {
+        name: "ANCILLARY_SURGE_FEE",
+      },
+    ],
+    totalFee: 3200,
+  },
+  parentId: "371281",
+  avgRatingString: "4.3",
+  totalRatingsString: "10K+",
+  sla: {
+    deliveryTime: 37,
+    lastMileTravel: 1.3,
+    serviceability: "SERVICEABLE",
+    slaString: "37 mins",
+    lastMileTravelString: "1.3 km",
+    iconType: "ICON_TYPE_EMPTY",
+  },
+  availability: {
+    nextCloseTime: "2023-11-07 04:00:00",
+    opened: true,
+  },
+  badges: {},
+  isOpen: true,
+
+
