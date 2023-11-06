@@ -1677,5 +1677,32 @@ test("Should load 2 input boxes on the contact component", () => {
   const inputBoxes = screen.getAllByRole("textbox");
 
   expect(inputBoxes.length).toBe(2);
+  //expect(inputBoxes.length).not.toBe(3);
 });
 
+
+Grouping of the test cases:
+
+descibe("Contact Us page Test Case", () => {
+  test("Should load contact us component", () => {
+    render(<Contact />);
+
+    const heading = screen.getByRole("heading");
+
+    expect(heading).toBeInTheDocument();
+  });
+
+Here describe is use to group all the test cases:
+for all the test cases written for the contact page we can group it and put it inside the block of describe("",()=>{
+)
+
+Instead of the test we can also write it.
+it and test both are the same
+
+it("Should load 2 input boxes on the contact component", () => {
+    render(<Contact />);
+
+    const inputBoxes = screen.getAllByRole("textbox");
+
+    expect(inputBoxes.length).toBe(2);
+  });
