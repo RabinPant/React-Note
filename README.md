@@ -1610,13 +1610,72 @@ npx jest --init
 
  if you're using jest above than 28 then we have to separetly install the JSDOM.
  npm install --save-dev jest-environment-jsdom
- <div className="m-4 p-4 flex items-center">
-          <button
-            className="filter-btn px-4 py-2 bg-gray-100 rounded-xl"
-            onClick={() => {
-              const filteredList = content.filter(
-                (res) => res.info.avgRating >= 4.0
-              );
-              console.log(filteredList);
-              setFilteredResturant(filteredList);
-            }}
+
+
+Test the simple sum.js:
+export const sum = (a, b) => {
+  return a + b;
+};
+
+
+now create a test file in __test__ folder:
+sum.test.js
+
+import {sum} from "../sum";
+
+test("Sum function should calculate the sum of two numbers",()=>{
+	const result = sum(3,4);
+
+  	//asasertion
+   	expect(result).toBe(7);
+
+})
+
+For rendering the component in the JsDom we need to load the component.
+for that we need to make our JSX work:
+
+to make the JSX work we need to install following file:
+npm i @babel/preset-react
+
+and include @babel/preset-react in our babel configuration file:
+
+we have to installl one more library:
+@testing-library/jest-dom =>This library will allow us to inlcude(.toBeInTheDocument())
+$ npm i -D @testing-library/jest-dom
+
+import { render, screen } from "@testing-library/react";
+import Contact from "../Contact";
+import "@testing-library/jest-dom";
+test("Should load contact us component", () => {
+  render(<Contact />);
+
+  const heading = screen.getByRole("heading");
+
+  expect(heading).toBeInTheDocument();
+});
+
+
+Sample test cases:
+test("Should load button inside Contact Component", () => {
+  render(<Contact />);
+
+  const Button = screen.getByRole("button");
+  //screen.getByText("Submit") => This will also work since it will find submit text in the page
+  expect(Button).toBeInTheDocument();
+});
+
+test("Should load input name inside Contact Component", () => {
+  render(<Contact />);
+  const inputName = screen.getByPlaceholderText("name");
+
+  expect(inputName).toBeInTheDocument();
+});
+
+test("Should load 2 input boxes on the contact component", () => {
+  render(<Contact />);
+
+  const inputBoxes = screen.getAllByRole("textbox");
+
+  expect(inputBoxes.length).toBe(2);
+});
+
